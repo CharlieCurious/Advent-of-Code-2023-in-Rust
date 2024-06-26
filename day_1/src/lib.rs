@@ -5,7 +5,7 @@ pub fn get_calibrations_sum(file_string: String) -> u32 {
 }
 
 fn get_calibration_from_line(line: &str) -> u32 {
-    let line_chars: Vec<_> = line.chars()
+    let line_chars: Vec<char> = line.chars()
         .collect();
 
     let mut start = 0;
@@ -15,10 +15,6 @@ fn get_calibration_from_line(line: &str) -> u32 {
     let mut last_number: Option<char> = None;
 
     while start <= end {
-        if first_number.is_some() && last_number.is_some() {
-            break;
-        }
-
         if first_number.is_none() {
             let start_ch = *line_chars.get(start)
                 .unwrap();
@@ -39,29 +35,26 @@ fn get_calibration_from_line(line: &str) -> u32 {
             }
             end -= 1;
         }
+        if first_number.is_some() && last_number.is_some() {
+            break;
+        }
+
     }
 
-    return process_found_numbers(first_number, last_number);
-}
+    let first_number = first_number
+        .expect("No numbers found on the string. All strings must have at least one number.");
+    let last_number = last_number.unwrap_or(first_number);
 
-fn process_found_numbers(first_number: Option<char>, last_number: Option<char>) -> u32 {
-    match (first_number, last_number) {
-        (Some(x), Some(y)) => return combine_digits(x, y),
-        (Some(x), None) => combine_digits(x, x),
-        (None, Some(y)) => combine_digits(y, y),
-        _ => panic!("No number values found on the string. All strings must have at least one number.")
-    }
+    combine_digits(first_number, last_number)
 }
 
 fn combine_digits(ch1: char, ch2: char) -> u32 {
-    let digit1 = char_to_u32(ch1);
-    let digit2 = char_to_u32(ch2);
+    let digit1 = ch1.to_digit(10)
+        .expect(&format!("{} is not a number", ch1));
+    let digit2 = ch2.to_digit(10)
+        .expect(&format!("{} is not a number", ch2));
 
     digit1 * 10 + digit2
-}
-
-fn char_to_u32(ch: char) -> u32 {
-    ch.to_digit(10).unwrap_or_else(|| panic!("{} is not a number", ch))
 }
 
 #[cfg(test)]
@@ -84,32 +77,6 @@ mod tests {
     }
 
     #[test]
-    fn should_process_found_numbers_correctly() {
-        // arrange
-        // both have values
-        let (x0, y0) = (Some('4'), Some('2'));
-        let (x2, y2) = (Some('4'), None);
-        let (x3, y3) = (None, Some('4'));
-
-        // act
-        let result0 = process_found_numbers(x0, y0);
-        let result1 = process_found_numbers(x2, y2);
-        let result2 = process_found_numbers(x3, y3);
-
-        // assert
-        assert_eq!(42, result0);
-        assert_eq!(44, result1);
-        assert_eq!(44, result2);
-    }
-
-    #[test]
-    #[should_panic]
-    fn should_panic_if_no_numbers_found() {
-        // act && assert
-        process_found_numbers(None, None);
-    }
-
-    #[test]
     fn should_combine_two_digit_chars_into_u32() {
         // arrange
         let ch1 = '8';
@@ -120,26 +87,5 @@ mod tests {
 
         // assert
         assert_eq!(84, result);
-    }
-
-    #[test]
-    fn should_convert_number_char_to_u32() {
-        // arrange
-        let ch_numbers = vec!['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-        // act
-        for ch in ch_numbers {
-            char_to_u32(ch);
-        }
-    }
-
-    #[test]
-    #[should_panic]
-    fn should_panic_if_try_to_convert_non_numerical_char() {
-        // arrange
-        let non_numerical_char = 'a';
-
-        // act && assert
-        char_to_u32(non_numerical_char);
     }
 }
