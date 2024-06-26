@@ -7,30 +7,30 @@ pub fn get_calibrations_sum(file_string: String) -> u32 {
 fn get_calibration_from_line(line: &str) -> u32 {
     let line_chars: Vec<char> = line.chars().collect();
 
-    let mut start = 0;
-    let mut end = line.len() - 1;
+    let mut first_index = 0;
+    let mut second_index = line.len() - 1;
 
     let mut first_number: Option<char> = None;
     let mut last_number: Option<char> = None;
 
-    while start <= line.len()-1 {
+    while first_index <= line.len() - 1 {
         if first_number.is_none() {
-            let start_ch = line_chars[start];
+            let start_ch = line_chars[first_index];
             if start_ch.is_digit(10) {
                 first_number = Some(start_ch)
             }
-            start += 1;
+            first_index += 1;
         }
 
         if last_number.is_none() {
-            let end_ch: char = line_chars[end];
+            let end_ch: char = line_chars[second_index];
             if end_ch.is_digit(10) {
                 last_number = Some(end_ch)
             }
-            if end == 0 {
+            if second_index == 0 {
                 break;
             }
-            end -= 1;
+            second_index -= 1;
         }
         if first_number.is_some() && last_number.is_some() {
             break;
