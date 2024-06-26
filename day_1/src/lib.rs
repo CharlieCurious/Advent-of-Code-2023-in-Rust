@@ -22,7 +22,7 @@ fn get_calibration_from_line(line: &str) -> u32 {
         if first_number.is_none() {
             let start_ch = *line_chars.get(start)
                 .unwrap();
-            if is_number_char(start_ch) {
+            if start_ch.is_digit(10) {
                 first_number = Some(start_ch)
             }
             start += 1;
@@ -31,7 +31,7 @@ fn get_calibration_from_line(line: &str) -> u32 {
         if last_number.is_none() {
             let end_ch: char = *line_chars.get(end)
                 .unwrap();
-            if is_number_char(end_ch) {
+            if end_ch.is_digit(10) {
                 last_number = Some(end_ch)
             }
             if end == 0 {
@@ -46,18 +46,11 @@ fn get_calibration_from_line(line: &str) -> u32 {
 
 fn process_found_numbers(first_number: Option<char>, last_number: Option<char>) -> u32 {
     match (first_number, last_number) {
-        (Some(x), Some(y)) => {
-            return combine_digits(x, y);
-        },
+        (Some(x), Some(y)) => return combine_digits(x, y),
         (Some(x), None) => combine_digits(x, x),
         (None, Some(y)) => combine_digits(y, y),
         _ => panic!("No number values found on the string. All strings must have at least one number.")
     }
-}
-
-fn is_number_char(ch: char) -> bool {
-    let ch_ascii = ch.to_ascii_lowercase();
-    ch_ascii >= '0' && ch_ascii <= '9'
 }
 
 fn combine_digits(ch1: char, ch2: char) -> u32 {
@@ -114,24 +107,6 @@ mod tests {
     fn should_panic_if_no_numbers_found() {
         // act && assert
         process_found_numbers(None, None);
-    }
-
-    #[test]
-    fn should_identify_number_and_non_number_char() {
-        // arrange
-        let ch_numbers = vec!['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        let non_ch_numbers = vec!['a', 'e', 'i', 'o', 'u'];
-
-        // act && assert
-        for ch in ch_numbers {
-            let result = is_number_char(ch);
-            assert!(result)
-        }
-
-        for ch in non_ch_numbers {
-            let result = is_number_char(ch);
-            assert!(!result)
-        }
     }
 
     #[test]
