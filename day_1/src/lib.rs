@@ -55,25 +55,23 @@ fn combine_digits(ch1: char, ch2: char) -> u32 {
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
     use crate::*;
     
-    #[test]
-    fn should_get_calibration_from_line() {
+    #[rstest]
+    #[case("1abc2", 12)]
+    #[case("pqr3stu8vwx", 38)]
+    #[case("a1b2c3d4e5f", 15)]
+    #[case("a1b2c3d4e5f", 15)]
+    #[case("t7rebuchet", 77)]
+    #[case("5charlie", 55)]
+    #[case("eightg1", 11)]
+    fn should_get_calibration_from_line(#[case] input: &str, #[case] expected: u32) {
         // act
-        let case0 = get_calibration_from_line("1abc2");
-        let case1 = get_calibration_from_line("pqr3stu8vwx");
-        let case2 = get_calibration_from_line("a1b2c3d4e5f");
-        let case3 = get_calibration_from_line("t7rebuchet");
-        let case4 = get_calibration_from_line("5charlie");
-        let case5 = get_calibration_from_line("eightg1");
+        let result = get_calibration_from_line(input);
 
         // assert
-        assert_eq!(12, case0);
-        assert_eq!(38, case1);
-        assert_eq!(15, case2);
-        assert_eq!(77, case3);
-        assert_eq!(55, case4);
-        assert_eq!(11, case5);
+        assert_eq!(expected, result);
     }
 
     #[test]
