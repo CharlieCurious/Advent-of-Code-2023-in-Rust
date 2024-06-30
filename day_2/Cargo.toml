@@ -1,0 +1,10 @@
+[package]
+name = "day_2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+thiserror = "1.0"
+
+[dev-dependencies]
+rstest = "0.21.0"
