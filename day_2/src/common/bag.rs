@@ -1,3 +1,4 @@
+#[derive(Debug, PartialEq)]
 pub struct Bag {
     reds: u32,
     greens: u32,

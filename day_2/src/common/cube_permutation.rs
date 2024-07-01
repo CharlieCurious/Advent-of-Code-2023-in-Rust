@@ -2,9 +2,9 @@ use super::bag::Bag;
 
 #[derive(Debug, PartialEq)]
 pub struct CubePermutation {
-    red: u32,
-    green: u32,
-    blue: u32
+    pub red: u32,
+    pub green: u32,
+    pub blue: u32
 }
 
 impl CubePermutation {
