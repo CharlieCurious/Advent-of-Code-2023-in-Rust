@@ -1,6 +1,7 @@
 use std::num::ParseIntError;
-use crate::part_one::{CubePermutation, Game};
 use thiserror::{self, Error};
+
+use super::{cube_permutation::CubePermutation, game::Game};
 
 #[derive(Debug, Error)]
 pub enum ParseError {
@@ -58,7 +59,7 @@ fn parse_cube_permutation(permutation_string: &str) -> Result<CubePermutation, P
 #[cfg(test)]
 mod tests {
     use rstest::rstest;
-    use crate::part_one::{CubePermutation, Game};
+    use crate::common::{cube_permutation::CubePermutation, game::Game};
 
     use super::parse_game_input;
 
